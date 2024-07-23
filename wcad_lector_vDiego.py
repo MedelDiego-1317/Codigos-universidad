@@ -66,6 +66,7 @@ with open("C:/Users/diego/OneDrive/Escritorio/Universidad/python/Proyectos INCAN
             inside_tag = False
             n += 1
 
+#----------------------------------------------------------------------------------------------------------#
 
 
 for i, lista in enumerate(listas_rellenables): # El i indice el indice y lista los elementos dentro de listas rellenables, es decir, puedo estar en la lista 1, compuesta de varias listas
@@ -75,6 +76,8 @@ for i, lista in enumerate(listas_rellenables): # El i indice el indice y lista l
             ejeydata = re.sub("'", "", sublista[end-2]) # Aqui hay algo muy importante, sin embargo no identifico que es, solamente puedo decir que sin este comando la longitud de las listas cuando el valor es positivo incrementa
             ejesy[i].append(ejeydata) # Almacena los datos
             ejesx[i].append(sublista[end-5])
+
+#----------------------------------------------------------------------------------------------------------#
 
 
 for i, (ejes_x, ejes_y) in enumerate(zip(ejesx, ejesy)): # Algo complejo pero zip conjunta dos arreglos en una, es decir, genera una tupla que puede ir siendo indexada, pero cada arreglo tiene su variable de elementos propia
@@ -87,3 +90,5 @@ for i, (ejes_x, ejes_y) in enumerate(zip(ejesx, ejesy)): # Algo complejo pero zi
         df.to_csv(filename, index=False)
     else:
         print(f"Error: Longitudes desiguales en lista {i+1}")
+
+#----------------------------------------------------------------------------------------------------------#
