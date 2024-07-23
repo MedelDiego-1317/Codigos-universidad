@@ -36,6 +36,8 @@ for i in profundidades:
 
 
 listas_rellenables = [[] for i in profundidades_lista]
+ejesy = [[] for i in profundidades_lista]
+ejesx = [[] for i in profundidades_lista]
 
 
 
@@ -49,7 +51,7 @@ with open("C:/Users/diego/OneDrive/Escritorio/Universidad/python/Proyectos INCAN
         if line.startswith("<"):
             inside_tag = True
             if n < len(listas_rellenables):
-                listas_rellenables[n].extend(data)  # Asegúrate de que n esté dentro del rango
+                listas_rellenables[n].extend([data])  # Asegúrate de que n esté dentro del rango
         elif line.startswith("$ENOM"):
             inside_tag = False
             n += 1
@@ -57,7 +59,18 @@ with open("C:/Users/diego/OneDrive/Escritorio/Universidad/python/Proyectos INCAN
 
 
 for i, lista in enumerate(listas_rellenables):
-    df = pd.DataFrame(lista, columns=['Datos'])
-    filename = f'archivo_{i + 1}.csv'
-    df.to_csv(filename, index=False)
-    print(f'DataFrame guardado en {filename}')
+    for sublista in lista:
+        if len(sublista) >= 4:
+            ejesx[i].append(sublista[1])
+            ejesy[i].append(sublista[4])
+
+
+
+
+for i, (ejes_x, ejes_y) in enumerate(zip(ejesx,ejesy)):
+    df = pd.DataFrame({
+        "x": ejes_x,
+        "y": ejes_y
+    })
+    filename = f"lista_{i+1}_data.csv"
+    df.to_csv(filename,index=False)
