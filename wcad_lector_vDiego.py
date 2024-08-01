@@ -30,7 +30,7 @@ with open("C:/Users/diego/OneDrive/Escritorio/Universidad/python/Proyectos INCAN
     for line in data_file:
         data=re.split('[<+>]', line)
 
-        if line.startswith("%FLSZ"): # Lo que quiero es obtener el numero de profundidades que se consideran
+        if line.startswith("%DPTH"): # Lo que quiero es obtener el numero de profundidades que se consideran
             profundidades.append(data)
 
 profundidades_lista = []
@@ -50,7 +50,7 @@ ejesx = [[] for i in profundidades_lista]
 #----------------------------------------------------------------------------------------------------------#
 
 
-with open("C:/Users/diego/OneDrive/Escritorio/Universidad/python/Proyectos INCAN/X15_PDD.ASC",'r') as data_file:
+with open("C:/Users/diego/OneDrive/Escritorio/Universidad/python/Proyectos INCAN/X15_Perfiles.ASC",'r') as data_file:
     
     n = 0
 
@@ -75,7 +75,7 @@ for i, lista in enumerate(listas_rellenables): # El i indice el indice y lista l
         if end > 5:  
             ejeydata = re.sub("'", "", sublista[end-2]) # Aqui hay algo muy importante, sin embargo no identifico que es, solamente puedo decir que sin este comando la longitud de las listas cuando el valor es positivo incrementa
             ejesy[i].append(ejeydata) # Almacena los datos
-            ejesx[i].append(sublista[end-3])
+            ejesx[i].append(sublista[end-5])
 
 #----------------------------------------------------------------------------------------------------------#
 
