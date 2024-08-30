@@ -46,7 +46,7 @@ df2 = pd.DataFrame()
 #%SSD  1000
 #%FLSZ 040*040
 
-with open("C:/Users/diego/OneDrive/Escritorio/Universidad/python/Proyectos INCAN/X15_PDD.ASC",'r') as data_file:
+with open("C:/Users/diego/OneDrive/Escritorio/Universidad/INCAN/Archivos ASC/X06PDD_31010.ASC ",'r') as data_file:
     for line in data_file:
         data=re.split('[<+>]', line)
 
@@ -87,7 +87,7 @@ ejesx = [[] for i in tc_lista]
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
 
-with open("C:/Users/diego/OneDrive/Escritorio/Universidad/python/Proyectos INCAN/X15_PDD.ASC",'r') as data_file:
+with open("C:/Users/diego/OneDrive/Escritorio/Universidad/INCAN/Archivos ASC/X06PDD_31010.ASC",'r') as data_file:
 
     n = 0
 

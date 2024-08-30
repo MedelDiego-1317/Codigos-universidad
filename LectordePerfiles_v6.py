@@ -9,6 +9,41 @@ from matplotlib import pyplot as plt
 from scipy import interpolate
 import pandas as pd
 
+def medioPerfil(target_list):
+    #copied_list = target_list.copy()
+    r=[]
+    #r.append(list_in_order)
+
+    for i in target_list:
+        r.append(i)
+
+    for i in reversed(-1*target_list[:-1]):
+        r.append(i)
+        #copied_list.remove(i)
+    return r
+
+def medioPerfilpositivo(target_list):
+    # Crea una copia de la lista original con valores multiplicados por -1
+    r = [-1 * i for i in reversed(target_list[1:])]
+    # Añade los valores originales al final de la lista resultante
+    r.extend(target_list)
+    return r
+
+def medioPerfil_y(target_list):
+    #copied_list = target_list.copy()
+    r=[]
+    #r.append(list_in_order)
+
+    for i in target_list:
+        r.append(i)
+
+    for i in reversed(target_list[:-1]):
+        r.append(i)
+        #copied_list.remove(i)
+    return r
+
+
+miarchivo="C:/Users/diego/OneDrive/Escritorio/Universidad/python/Proyectos INCAN/6XPERFILVB_TPS_A.ASC"
 #import matplotlib.pyplot as plt
 
 inside_tag = False
@@ -45,7 +80,8 @@ df2 = pd.DataFrame()
 #%FLSZ 030*030
 #%DPTH 050
 
-with open("C:/Users/diego/OneDrive/Escritorio/Universidad/INCAN/Archivos ASC/X06 FFF Perfiles smooth 1mm (1).ASC",'r') as data_file:
+#/media/timofey/linux201/python/read_w2cad/VB_TPS6X/VB_6X_profile.data
+with open(miarchivo,'r') as data_file:
     for line in data_file:
         data=re.split('[<+>]', line)
 
@@ -96,7 +132,11 @@ for i in profundidades_lista:
     p = npp[1]
     prof.append(p)
 
-
+ssd_conf = []
+for i in ssd_lista:
+    nssd = i.split()
+    sd = nssd[1]
+    ssd_conf.append(sd)
 
 
 #----------------------------------------------------------------------------------------------------------#
@@ -110,7 +150,7 @@ ejesx = [[] for i in profundidades_lista]
 #----------------------------------------------------------------------------------------------------------#
 
 
-with open("C:/Users/diego/OneDrive/Escritorio/Universidad/INCAN/Archivos ASC/X06 FFF Perfiles smooth 1mm (1).ASC",'r') as data_file:
+with open(miarchivo,'r') as data_file:
 
     n = 0
 
@@ -139,6 +179,7 @@ for i, lista in enumerate(listas_rellenables): # El i indice el indice y lista l
 
 #----------------------------------------------------------------------------------------------------------#
 
+df4 = pd.DataFrame()
 
 for i, (ejes_x, ejes_y) in enumerate(zip(ejesx, ejesy)): # Algo complejo pero zip conjunta dos arreglos en una, es decir, genera una tupla que puede ir siendo indexada, pero cada arreglo tiene su variable de elementos propia
     if len(ejes_x) == len(ejes_y):  # Cuida que la longitud de los elementos sea la misma, para poder generar un data frame
@@ -150,21 +191,69 @@ for i, (ejes_x, ejes_y) in enumerate(zip(ejesx, ejesy)): # Algo complejo pero zi
         x = pd.to_numeric(df['x'])
         y = pd.to_numeric(df['y'])
 
+        if x.max() == 0.0 :
+            x= medioPerfil(x)
+            y= medioPerfil_y(y)
+            x = np.array(x).astype(float)
+            y = np.array(y).astype(float)
+
+        if x.min() == 0.0 :
+            x= medioPerfil(x)
+            y= medioPerfil_y(y)
+            x = np.array(x).astype(float)
+            y = np.array(y).astype(float)
+
+
+        plt.plot(x,y, '-')
+        plt.title(f"tamaño de campo_{tamaño_corregido[i]}x{tamaño_corregido[i]}_profundidad_{prof[i]}_ssd_{ssd_conf[i]}")
+        plt.xlabel('distancia (mm)')
+        plt.ylabel('Dosis')
+        plt.show()
+
         f = interpolate.interp1d(x,y)
-        maximoX= pd.to_numeric(df['x'].max())
+        #numerico=pd.to_numeric(df['x'])
+
+        #maximoX= pd.to_numeric(df['x'].max())
+        #maximoX= numerico.abs().max()
+        maximoX=x.max()
+
 
         xMedidoInterpolado = np.arange(-maximoX,maximoX,1)
         yMedidoInterpolado = f(xMedidoInterpolado)
-        df3 = pd.DataFrame()
 
+
+
+	   # SI QUIERES ARCHIVO POR CURVA
+        df3 = pd.DataFrame()
+        colname =f"{tamaño_corregido[i]}_profundidad_{prof[i]}"
+
+        #df4.insert(i, colname, xMedidoInterpolado, False)
         df3.insert(0, 'Xres', xMedidoInterpolado, False)
         df3.insert(1, 'Yres', yMedidoInterpolado, False)
+        df3.insert(2, 'Curva', colname, False)
 
-        filename2 =f"tamaño de campo_{tamaño_corregido[i]}x{tamaño_corregido[i]}_profundidad_{prof[i]}.csv"
+        df4 = df4._append(df3, ignore_index=True)
+        # Graficar
+        x4 = pd.to_numeric(df4['Xres'])
+        y4 = pd.to_numeric(df4['Yres'])
+       # plt.plot(x4,y4, '-')
+
+       # plt.title(f"Curva Interpolada")
+       # plt.xlabel('distancia (mm)')
+       # plt.ylabel('Dosis')
+       #plt.show()
+
+
+        filename2 =f"tamaño de campo_{tamaño_corregido[i]}x{tamaño_corregido[i]}_profundidad_{prof[i]}_ssd_{ssd_conf[i]}.csv"
         #filename = f"lista_{i+1}_data.csv"
-        df3.to_csv(filename2, index=False)
+
+	    # EXPORTAR CURVAS EN CSV
+	    #df3.to_csv(filename2, index=False)
+
         #df.to_csv(filename, index=False)
     else:
         print(f"Error: Longitudes desiguales en lista {i+1}")
 
+df4.to_csv("TPS_A.csv")
 #----------------------------------------------------------------------------------------------------------#
+

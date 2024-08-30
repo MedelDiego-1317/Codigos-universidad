@@ -26,7 +26,7 @@ tc= "none"
 df2 = pd.DataFrame()
 
 
-with open("C:/Users/diego/OneDrive/Escritorio/Universidad/python/Proyectos INCAN/X15_Perfiles.ASC",'r') as data_file:
+with open("C:/Users/diego/OneDrive/Escritorio/Universidad/INCAN/Archivos ASC/X06 FFF Perfiles smooth 1mm.ASC",'r') as data_file:
     for line in data_file:
         data=re.split('[<+>]', line)
 
@@ -50,7 +50,7 @@ ejesx = [[] for i in profundidades_lista]
 #----------------------------------------------------------------------------------------------------------#
 
 
-with open("C:/Users/diego/OneDrive/Escritorio/Universidad/python/Proyectos INCAN/X15_Perfiles.ASC",'r') as data_file:
+with open("C:/Users/diego/OneDrive/Escritorio/Universidad/INCAN/Archivos ASC/X06 FFF Perfiles smooth 1mm.ASC",'r') as data_file:
     
     n = 0
 
@@ -72,10 +72,10 @@ with open("C:/Users/diego/OneDrive/Escritorio/Universidad/python/Proyectos INCAN
 for i, lista in enumerate(listas_rellenables): # El i indice el indice y lista los elementos dentro de listas rellenables, es decir, puedo estar en la lista 1, compuesta de varias listas
     for sublista in lista: # Sublista es un elemento de la variable lista
         end = len(sublista) # Determinamos el tamaño de esta sublista
-        if end > 5:  
-            ejeydata = re.sub("'", "", sublista[end-2]) # Aqui hay algo muy importante, sin embargo no identifico que es, solamente puedo decir que sin este comando la longitud de las listas cuando el valor es positivo incrementa
-            ejesy[i].append(ejeydata) # Almacena los datos
-            ejesx[i].append(sublista[end-5])
+        ejeydata = re.sub("'", "", sublista[end-2]) # Aqui hay algo muy importante, sin embargo no identifico que es, solamente puedo decir que sin este comando la longitud de las listas cuando el valor es positivo incrementa
+        ejesy[i].append(ejeydata) # Almacena los datos
+        ejexdata = re.sub("'","", sublista[end-5])
+        ejesx[i].append(ejexdata)
 
 #----------------------------------------------------------------------------------------------------------#
 
